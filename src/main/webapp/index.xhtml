@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>webservice</title>
+	<script type="text/javascript"
+		src="/src/main/resources/js/jquery-3.2.0.min.js" />
+</h:head>
+<h:body>
+	<p:tooltip />
+	<p:messages id="msgs" autoUpdate="true" closable="true"
+		showIcon="false" />
+
+	<h:form id="frmCadastrar">
+		<p:panelGrid columns="2">
+			<h:outputText value="nome: " />
+			<h:inputText value="#{testeController.teste.nome}" />
+
+			<h:outputText value="sobrenome: " />
+			<h:inputText value="#{testeController.teste.sobrenome}" />
+		</p:panelGrid>
+
+		<p:commandButton action="#{testeController.salvar}" value="salvar"
+			update="@form" />
+	</h:form>
+
+	<br />
+	<p:separator />
+	<br />
+
+	<h:form id="listagem">
+		<p:dataTable value="#{testeController.listar()}" var="teste"
+			paginator="true" rows="6" rowHover="true">
+			<p:column>
+				<f:facet name="header">ID</f:facet>
+				#{teste.id}
+			</p:column>
+			<p:column>
+				<f:facet name="header">Nome</f:facet>
+				#{teste.nome}
+			</p:column>
+			<p:column>
+				<f:facet name="header">Sobrenome</f:facet>
+				#{teste.sobrenome}
+			</p:column>
+			<p:column>
+				<f:facet name="header">opçoes</f:facet>
+				<p:commandButton oncomplete="PF('dialogo').show();" process="@this"
+					icon="ui-icon-search" update=":frmDetalhe">
+					<f:setPropertyActionListener value="#{l}"
+						target="#{testeController.teste}" />
+				</p:commandButton>
+
+				<p:commandButton id="btn" icon="ui-icon-pencil"
+					action="#{testeController.editar}" />
+
+				<p:commandButton styleClass="btn" icon="ui-icon-trash"
+					action="#{testeController.excluir}" />
+			</p:column>
+		</p:dataTable>
+	</h:form>
+
+	<p:dialog modal="true" height="400" width="400" widgetVar="dialogo">
+		<h:form id="frmDetalhe">
+			<p:panelGrid columns="2">
+				<h:outputLabel value="Nome: " />
+				<p:inputText value="#{testeController.teste.nome}" />
+				<h:outputLabel value="Sobrenome" />
+				<p:inputText value="#{testeController.teste.sobrenome}" />
+			</p:panelGrid>
+			<p:panelGrid columns="2">
+				<p:commandButton value="Salvar" action="#{testeController.salvar}"
+					process="@form" update="@form :listagem" />
+				<p:commandButton value="Cancelar" oncomplete="PF('dialogo').hide();" />
+			</p:panelGrid>
+		</h:form>
+	</p:dialog>
+
+	<script>setTimeout(function() { $('#msgs').html(''); }, 3000);</script>
+</h:body>
+</html>
