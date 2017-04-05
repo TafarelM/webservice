@@ -3,9 +3,7 @@ package com.tafarelmello.webservice.dao;
 import java.util.List;
 
 import javax.ejb.Stateless;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import javax.persistence.Query;
 
 import com.tafarelmello.webservice.model.Teste;
 
@@ -15,13 +13,11 @@ public class TesteDAO extends GenericDAO<Teste, Long> {
 		super(Teste.class);
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Teste> getListOrdenada() {
-		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Teste> query = builder.createQuery(Teste.class);
-		Root<Teste> from = query.from(Teste.class);
-		query.select(from).orderBy(builder.asc(from.get("id")));
-		List<Teste> lista = entityManager.createQuery(query).getResultList();
-		return lista;
+		Query query = entityManager.createQuery("SELECT t FROM Teste t ORDER BY t.id ASC");
+
+		return query.getResultList();
 	}
 
 }

@@ -2,8 +2,8 @@ package com.tafarelmello.webservice.service;
 
 import java.util.List;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -23,8 +23,11 @@ import com.tafarelmello.webservice.model.Teste;
 @Produces(MediaType.APPLICATION_JSON)
 public class TesteService {
 
-	@EJB
+	@Inject
 	TesteDAO testeDAO;
+	
+	public TesteService() {
+	}
 
 	//BUSCAR TODOS
 	@GET

@@ -7,7 +7,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.validation.Valid;
 
 public abstract class GenericDAO<T, I extends Serializable> {
 
@@ -24,21 +23,21 @@ public abstract class GenericDAO<T, I extends Serializable> {
 		this.persistedClass = persistedClass;
 	}
 
-	public T salvar(@Valid T entity) {
+	public void salvar(T entity) {
 		entityManager.persist(entity);
-		return entity;
 	}
 
-	public T atualizar(@Valid T entity) {
+	public void atualizar(T entity) {
 		entityManager.merge(entity);
-		return entity;
+	}
+
+	public T encontrar(I id) {
+		return entityManager.find(persistedClass, id);
 	}
 
 	public void remover(I id) {
 		T entity = encontrar(id);
-
-		T mergedEntity = entityManager.merge(entity);
-		entityManager.remove(mergedEntity);
+		entityManager.remove(entity);
 	}
 
 	public List<T> getList() {
@@ -46,10 +45,6 @@ public abstract class GenericDAO<T, I extends Serializable> {
 		CriteriaQuery<T> query = builder.createQuery(persistedClass);
 		query.from(persistedClass);
 		return entityManager.createQuery(query).getResultList();
-	}
-
-	public T encontrar(I id) {
-		return entityManager.find(persistedClass, id);
 	}
 
 }
